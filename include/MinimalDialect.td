@@ -42,8 +42,7 @@ def Minimal_Dialect : Dialect {
 class Minimal_Op<string mnemonic, list<Trait> traits = []> :
         Op<Minimal_Dialect, mnemonic, traits>;
 
-def Minimal_FooOp : Minimal_Op<"foo", [Pure,
-                                             SameOperandsAndResultType]> {
+def Minimal_FooOp : Minimal_Op<"foo", [Pure, SameOperandsAndResultType]> {
     let summary = "Illustrates how to define an operation.";
     let description = [{
         The `minimal.foo` operation illustrates how to define a new

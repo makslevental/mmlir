@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20.0)
-project(euDSL LANGUAGES CXX C)
+project(mmlir LANGUAGES CXX C)
 
 set(CMAKE_BUILD_WITH_INSTALL_NAME_DIR ON)
 
@@ -30,9 +30,9 @@ add_definitions(${LLVM_DEFINITIONS})
 add_subdirectory(include)
 include_directories(include)
 add_subdirectory(src)
-add_subdirectory(test)
 if(MLIR_ENABLE_BINDINGS_PYTHON)
   include(MLIRDetectPythonEnv)
   mlir_configure_python_dev_packages()
-  add_subdirectory(python)
+  add_subdirectory(mmlir)
 endif()
+add_subdirectory(test)

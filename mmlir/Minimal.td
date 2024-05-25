@@ -9,6 +9,6 @@
 #ifndef PYTHON_BINDINGS_MINIMAL_OPS
 #define PYTHON_BINDINGS_MINIMAL_OPS
 
-include "MinimalOps.td"
+include "MinimalDialect.td"
 
 #endif

@@ -16,9 +16,7 @@ PYBIND11_MODULE(_minimal, m) {
   //===--------------------------------------------------------------------===//
   // minimal dialect
   //===--------------------------------------------------------------------===//
-  auto minimalM = m.def_submodule("minimal");
-
-  minimalM.def(
+  m.def(
       "register_dialect",
       [](MlirContext context, bool load) {
         MlirDialectHandle handle = mlirGetDialectHandle__minimal__();

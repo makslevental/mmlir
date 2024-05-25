@@ -14,9 +14,9 @@ set(MINIMAL_TEST_DEPENDS
     not
     minimal-opt)
 
-#if(MLIR_ENABLE_BINDINGS_PYTHON)
-#  list(APPEND MINIMAL_TEST_DEPENDS MinimalPythonModules)
-#endif()
+if(MLIR_ENABLE_BINDINGS_PYTHON)
+  list(APPEND MINIMAL_TEST_DEPENDS MinimalPythonModules)
+endif()
 
 add_lit_testsuite(
   check-minimal "Running the minimal regression tests"

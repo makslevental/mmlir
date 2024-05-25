@@ -52,19 +52,15 @@ config.substitutions.append(("%minimal_libs", config.minimal_libs_dir))
 llvm_config.with_environment("PATH", config.llvm_tools_dir, append_path=True)
 
 tool_dirs = [config.minimal_tools_dir, config.llvm_tools_dir]
-tools = [
-    "mlir-opt",
-    "minimal-capi-test",
-    "minimal-opt",
-    "minimal-translate",
-]
+tools = ["minimal-opt"]
 
 llvm_config.add_tool_substitutions(tools, tool_dirs)
 
 llvm_config.with_environment(
     "PYTHONPATH",
     [
-        os.path.join(config.mlir_obj_dir, "python_packages", "minimal"),
+        os.path.join(config.minimal_obj_root, "mmlir"),
+        os.path.join(config.minimal_src_root),
     ],
     append_path=True,
 )
