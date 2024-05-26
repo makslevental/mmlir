@@ -11,13 +11,16 @@ set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard to conform to")
 # -DCMAKE_CXX_FLAGS=-MT
 # -DCMAKE_C_FLAGS=-MT
 # -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
-# -DCMAKE_POLICY_DEFAULT_CMP0091=NEW
 if(MSVC)
   add_compile_options(
     $<$<CONFIG:>:/MT> # ---------|
     $<$<CONFIG:Debug>:/MTd> # ---|-- Statically link the runtime libraries
     $<$<CONFIG:Release>:/MT> # --|
   )
+endif()
+
+if(POLICY CMP0091)
+  cmake_policy(SET CMP0091 NEW)
 endif()
 
 find_package(MLIR REQUIRED CONFIG)

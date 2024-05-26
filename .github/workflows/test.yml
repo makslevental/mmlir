@@ -104,7 +104,9 @@ jobs:
           -DCMAKE_CXX_FLAGS=-MT
           -DCMAKE_C_FLAGS=-MT
           -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
-          -DCMAKE_POLICY_DEFAULT_CMP0091=NEW
+          -DCMAKE_VISIBILITY_INLINES_HIDDEN=ON
+          -DCMAKE_C_VISIBILITY_PRESET=hidden
+          -DCMAKE_CXX_VISIBILITY_PRESET=hidden
           -DCMAKE_PREFIX_PATH=$MLIR_DIR
           -DLLVM_EXTERNAL_LIT="$(which lit)"
           -DPython3_EXECUTABLE="$(which python)"
