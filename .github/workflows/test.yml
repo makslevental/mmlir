@@ -155,11 +155,12 @@ jobs:
             
             apt-get update -q -y
             apt-get install -y wget build-essential python3 python-is-python3 cmake ninja-build
+        
             
           run: |
             
             cd /workspace
-            
+            pip install -r requirements.txt
             cmake -G Ninja \
               -DCMAKE_PREFIX_PATH=$(python -c "print(__import__('mlir').__path__[0])") \
               -DLLVM_EXTERNAL_LIT=$(which lit) \
