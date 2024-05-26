@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-22.04, macos-12, macos-14, windows-2022 ]
+        os: [ ubuntu-22.04, macos-12, macos-14, windows-2019 ]
         py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
 
         exclude:
@@ -102,7 +102,9 @@ jobs:
           -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
           -DCMAKE_PREFIX_PATH=$MLIR_DIR
           -DLLVM_EXTERNAL_LIT="$(which lit)"
-          -DPython3_EXECUTABLE="$(which python)" -DCMAKE_CXX_FLAGS="/MT" -DCMAKE_C_FLAGS="/MT"
+          -DPython3_EXECUTABLE="$(which python)"
+          -DCMAKE_CXX_FLAGS=-MT
+          -DCMAKE_C_FLAGS=-MT
           -B build
           -S $PWD
 
@@ -120,7 +122,7 @@ jobs:
             CIBW_ARCHS=x86_64
           elif [ x"${{ matrix.OS }}" == x"macos-12" ]; then
             CIBW_ARCHS=arm64
-          elif [ x"${{ matrix.OS }}" == x"windows-2022" ]; then
+          elif [ x"${{ matrix.OS }}" == x"windows-2019" ]; then
             CIBW_ARCHS=AMD64
           fi
           export CIBW_ARCHS
