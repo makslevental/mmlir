@@ -59,15 +59,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Cpp
-        uses: aminya/setup-cpp@v1
+      - uses: ilammy/msvc-dev-cmd@v1.4.1
+        if: ${{ inputs.MATRIX_OS == 'windows-2019' }}
+
+      - name: Set up Visual Studio shell
+        if: ${{ inputs.MATRIX_OS == 'windows-2019' }}
+        uses: egor-tensin/vs-shell@v2
         with:
-          compiler: ${{ contains(matrix.OS, 'macos') && 'llvm' || 'gcc-13' }}
-          vcvarsall: ${{ contains(matrix.OS, 'windows') }} # evaluate to the string 'true'
-          msvc: ${{ contains(matrix.OS, 'windows') }}
-          choco: ${{ contains(matrix.OS, 'windows') }}
-          cmake: true
-          ninja: true
+          arch: x64
+
+      - name: MS Build
+        if: ${{ inputs.MATRIX_OS == 'windows-2019' }}
+        uses: microsoft/setup-msbuild@v1.1
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -79,6 +82,7 @@ jobs:
         run: |
           
           pip install -r requirements.txt
+          pip install cmake>=3.28 setuptools>=42 wheel
           pip download mlir -f https://makslevental.github.io/wheels
           unzip mlir-*.whl
           echo "MLIR_DIR=$PWD/mlir" >> $GITHUB_ENV
