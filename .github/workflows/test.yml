@@ -132,7 +132,7 @@ jobs:
           export CIBW_BUILD="cp${CIBW_BUILD//./}-*"
           cibuildwheel --output-dir wheelhouse
           pip install mmlir -f wheelhouse
-          pushd test/python && pthon smoketest.py && popd
+          pushd test/python && python smoketest.py && popd
 
   test-aarch64:
 
@@ -165,6 +165,7 @@ jobs:
             cd /workspace
             pip install -r requirements.txt
             pip download mlir -f https://makslevental.github.io/wheels
+            unzip mlir-*.whl
             
             cmake -G Ninja \
               -DCMAKE_PREFIX_PATH=$PWD/mlir \
@@ -192,9 +193,10 @@ jobs:
             
             pip install cibuildwheel
             pip download mlir -f https://makslevental.github.io/wheels
+            unzip mlir-*.whl
             
             CIBW_BUILD=${{ matrix.py_version }}
             export CIBW_BUILD="cp${CIBW_BUILD//./}-*"
             cibuildwheel --output-dir wheelhouse
             pip install mmlir -f wheelhouse
-            pushd test/python && pthon smoketest.py && popd
+            pushd test/python && python smoketest.py && popd

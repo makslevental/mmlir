@@ -17,6 +17,10 @@ Note, `pip install -r requirements.txt` is required either way (in order to get 
 A minimal CMake might look like:
 
 ```shell 
+pip install -r requirements.txt
+pip download mlir -f https://makslevental.github.io/wheels
+unzip mlir-*.whl
+
 cmake -G Ninja \
   -DPython3_EXECUTABLE=$(which python) \
   -DCMAKE_PREFIX_PATH=$(python -c "print(__import__('mlir').__path__[0])") \
