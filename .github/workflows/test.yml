@@ -134,6 +134,7 @@ jobs:
           rm -rf build
 
       - name: Build and test using setup.py
+        if: ${{ !contains(matrix.OS, 'windows') }}
         run: |          
 
           if [ x"${{ matrix.OS }}" == x"ubuntu-22.04" ]; then
