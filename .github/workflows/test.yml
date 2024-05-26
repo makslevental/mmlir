@@ -157,9 +157,9 @@ jobs:
           install: |
             
             apt-get update -q -y
-            apt-get install -y wget build-essential python3 python-is-python3 python3-pip cmake ninja-build
+            apt-get install -y wget build-essential python3 \
+              python-is-python3 python3-pip cmake ninja-build unzip
         
-            
           run: |
             
             cd /workspace
@@ -185,7 +185,8 @@ jobs:
           install: |
             
             apt-get update -q -y
-            apt-get install -y wget build-essential python3 python-is-python3 python3-pip cmake ninja-build
+            apt-get install -y wget build-essential python3 \
+              python-is-python3 python3-pip cmake ninja-build unzip
             
           run: |
             
