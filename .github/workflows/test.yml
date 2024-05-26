@@ -72,7 +72,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "${{ matrix.py_version }}"
           allow-prereleases: true
 
       - name: install prereqs
@@ -98,13 +98,11 @@ jobs:
         run: >-
           cmake -G Ninja
           -DCMAKE_CXX_COMPILER=cl
-          -DCMAKE_CXX_FLAGS="/MT"
           -DCMAKE_C_COMPILER=cl
-          -DCMAKE_C_FLAGS="/MT"
           -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
           -DCMAKE_PREFIX_PATH=$MLIR_DIR
           -DLLVM_EXTERNAL_LIT="$(which lit)"
-          -DPython3_EXECUTABLE="$(which python)"
+          -DPython3_EXECUTABLE="$(which python)" -DCMAKE_CXX_FLAGS="/MT" -DCMAKE_C_FLAGS="/MT"
           -B build
           -S $PWD
 

@@ -23,7 +23,7 @@ unzip mlir-*.whl
 
 cmake -G Ninja \
   -DPython3_EXECUTABLE=$(which python) \
-  -DCMAKE_PREFIX_PATH=$(python -c "print(__import__('mlir').__path__[0])") \
+  -DCMAKE_PREFIX_PATH=$PWD/mlir \
   -DLLVM_EXTERNAL_LIT=$(which lit) \
   -B build \
   -S $PWD

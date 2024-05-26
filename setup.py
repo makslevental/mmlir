@@ -120,7 +120,7 @@ class CMakeBuild(build_ext):
 
 setup(
     author="Maksim Levental",
-    name="minimal-mlir",
+    name="mmlir",
     include_package_data=True,
     author_email="maksim.levental@gmail.com",
     description=f"A minimal (really) out-of-tree MLIR example",
