@@ -154,7 +154,7 @@ jobs:
           install: |
             
             apt-get update -q -y
-            apt-get install -y wget build-essential python3
+            apt-get install -y wget build-essential python3 python-is-python3 cmake ninja-build
             
           run: |
             
@@ -175,6 +175,11 @@ jobs:
           arch: aarch64
           distro: ubuntu22.04
           dockerRunArgs: --volume "${{ github.workspace }}:/workspace"
+          install: |
+            
+            apt-get update -q -y
+            apt-get install -y wget build-essential python3 python-is-python3 cmake ninja-build
+            
           run: |
             
             cd /workspace
