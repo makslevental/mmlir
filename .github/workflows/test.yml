@@ -98,13 +98,14 @@ jobs:
         run: >-
           cmake -G Ninja
           -DCMAKE_CXX_COMPILER=cl
+          -DCMAKE_CXX_FLAGS=-MT
           -DCMAKE_C_COMPILER=cl
+          -DCMAKE_C_FLAGS=-MT
           -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+          -DCMAKE_POLICY_DEFAULT_CMP0091=NEW
           -DCMAKE_PREFIX_PATH=$MLIR_DIR
           -DLLVM_EXTERNAL_LIT="$(which lit)"
           -DPython3_EXECUTABLE="$(which python)"
-          -DCMAKE_CXX_FLAGS=-MT
-          -DCMAKE_C_FLAGS=-MT
           -B build
           -S $PWD
 

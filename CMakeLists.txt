@@ -3,7 +3,16 @@ project(mmlir LANGUAGES CXX C)
 
 set(CMAKE_BUILD_WITH_INSTALL_NAME_DIR ON)
 
-set(CMAKE_CXX_STANDARD 17CACHE STRING "C++ standard to conform to")
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard to conform to")
+
+# error LNK2019: unresolved external symbol
+if(MSVC)
+  add_compile_options(
+    $<$<CONFIG:>:/MT> # ---------|
+    $<$<CONFIG:Debug>:/MTd> # ---|-- Statically link the runtime libraries
+    $<$<CONFIG:Release>:/MT> # --|
+  )
+endif()
 
 find_package(MLIR REQUIRED CONFIG)
 
