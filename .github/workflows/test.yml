@@ -75,6 +75,13 @@ jobs:
       - name: Install Ninja
         uses: llvm/actions/install-ninja@6a57890d0e3f9f35dfc72e7e48bc5e1e527cdd6c # Jan 17
 
+      - name: set ENV macos
+        if: contains(matrix.OS, 'macos')
+        shell: bash
+        run: |
+          # error: 'value' is unavailable: introduced in macOS 10.13
+          echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" | tee -a $GITHUB_ENV
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -124,9 +131,10 @@ jobs:
         run: |
           
           pushd build && ninja check-minimal && popd
+          rm -rf build
 
       - name: Build and test using setup.py
-        run: |
+        run: |          
 
           if [ x"${{ matrix.OS }}" == x"ubuntu-22.04" ]; then
             CIBW_ARCHS=x86_64
@@ -188,6 +196,7 @@ jobs:
               -S $PWD
             
             pushd build && ninja check-minimal && popd
+            rm -rf build
 
       - name: Test cibuildwheel
         uses: uraimo/run-on-arch-action@v2
