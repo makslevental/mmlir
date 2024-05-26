@@ -75,10 +75,10 @@ jobs:
           python-version: "3.10"
           allow-prereleases: true
 
-      - name: Get MLIR distribution
+      - name: install prereqs
         run: |
           
-          pip install mlir -f https://makslevental.github.io/wheels
+          pip install -r requirements.txt
 
       - name: Configure CMake
         if: ${{ !contains(matrix.OS, 'windows') }}
