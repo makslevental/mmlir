@@ -163,7 +163,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-22.04 ]
-        py_version: [ "3.10" ]
+        py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
 
     steps:
       - name: Checkout
@@ -208,15 +208,23 @@ jobs:
           install: |
             
             apt-get update -q -y
-            apt-get install -y wget build-essential python3 \
-              python-is-python3 python3-pip cmake ninja-build unzip
-            
+            apt-get install -y wget build-essential cmake ninja-build
+
+            mkdir -p ~/miniconda3
+            wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh -O miniconda.sh
+            bash miniconda.sh -b -u -p /root/miniconda3
+            eval "$(/root/miniconda3/bin/conda shell.bash hook)"
+            conda init
+
           run: |
             
+            eval "$(/root/miniconda3/bin/conda shell.bash hook)"
+            conda create -n env -q -y -c conda-forge/label/python_rc python=${{ matrix.py_version }} 
+            conda activate env
+            
             cd /workspace
-            pip install cibuildwheel
-            CIBW_BUILD=${{ matrix.py_version }}
-            export CIBW_BUILD="cp${CIBW_BUILD//./}-*"
+            
+            export CIBW_ARCHS=aarch64
             pip wheel . -v -w wheelhouse --no-build-isolation
             pip install mmlir -f wheelhouse
             pushd test/python && python smoketest.py && popd
