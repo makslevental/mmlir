@@ -47,9 +47,8 @@ class CMakeBuild(build_ext):
         cfg = "Release"
 
         cmake_generator = os.environ.get("CMAKE_GENERATOR", "Ninja")
-        import mlir
 
-        MLIR_INSTALL_ABS_PATH = Path(mlir.__path__[0])
+        MLIR_INSTALL_ABS_PATH = Path(os.getenv("MLIR_DIR", "mlir"))
 
         cmake_args = [
             f"-G {cmake_generator}",
