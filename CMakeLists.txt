@@ -5,7 +5,13 @@ set(CMAKE_BUILD_WITH_INSTALL_NAME_DIR ON)
 
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard to conform to")
 
+# to solve windows linking issues
 # error LNK2019: unresolved external symbol
+# you need the below and the following cmake flags
+# -DCMAKE_CXX_FLAGS=-MT
+# -DCMAKE_C_FLAGS=-MT
+# -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+# -DCMAKE_POLICY_DEFAULT_CMP0091=NEW
 if(MSVC)
   add_compile_options(
     $<$<CONFIG:>:/MT> # ---------|
