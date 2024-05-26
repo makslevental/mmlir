@@ -213,7 +213,7 @@ jobs:
           run: |
             
             cd /workspace
-            
+            pip install cibuildwheel
             CIBW_BUILD=${{ matrix.py_version }}
             export CIBW_BUILD="cp${CIBW_BUILD//./}-*"
             cibuildwheel --output-dir wheelhouse
