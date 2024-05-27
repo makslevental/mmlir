@@ -6,7 +6,7 @@ This repo demos a slightly unconventional way to bootstrap an MLIR project:
 2. It smashes all the include headers into a single header [include/MinimalDialect.h](include/MinimalDialect.h) and all the tablegen into a single [include/MinimalDialect.td](include/MinimalDialect.td) and *also emits all the tablegen into the source tree itself*;
    1. I think seeing the emitted tablegen is useful for demystifying how MLIR works
 3. It smashes all the implementation into a single [src/MinimalDialect.cpp](src/MinimalDialect.cpp)
-4. Python bindings @ [mmlir/dialects](mmlir/dialects) are arranged to have generated artifacts to be dumped in place.
+4. Python bindings @ [python/mmlir/dialects](python/mmlir/dialects) are arranged to have generated artifacts to be dumped in place.
 
 It is primarily meant to be used a learning aid (e.g., for understanding which parts of the upstream CMake are essential and which aren't) and not as a germ/seed/cookiecutter for a production quality project.
 
