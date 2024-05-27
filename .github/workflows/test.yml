@@ -222,6 +222,7 @@ jobs:
             cd /workspace
             
             export CIBW_ARCHS=aarch64
+            pip install -r requirements.txt
             pip wheel . -v -w wheelhouse --no-build-isolation
             pip install mmlir -f wheelhouse
             pushd test/python && python smoketest.py && popd
