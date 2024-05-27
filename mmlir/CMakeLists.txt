@@ -50,6 +50,8 @@ add_mlir_python_common_capi_library(MinimalPythonCAPI
   # the whole distro of mlir. cibuildwheel will correct this anyway.
   # also it's only for stuff like libmlir_utils etc.
   # RELATIVE_INSTALL_ROOT "../../.."
+  DECLARED_HEADERS
+    MLIRPythonCAPI.HeaderSources
   DECLARED_SOURCES
     MinimalPythonSources
     MLIRPythonExtension.RegisterEverything
