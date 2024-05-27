@@ -17,6 +17,14 @@ extern "C" {
 
 MLIR_DECLARE_CAPI_DIALECT_REGISTRATION(Minimal, minimal);
 
+//===---------------------------------------------------------------------===//
+// CustomType
+//===---------------------------------------------------------------------===//
+
+MLIR_CAPI_EXPORTED bool mlirTypeIsAMinimalCustomType(MlirType type);
+
+MLIR_CAPI_EXPORTED MlirType mlirMinimalCustomTypeGet(MlirContext ctx, MlirStringRef value);
+
 #ifdef __cplusplus
 }
 #endif

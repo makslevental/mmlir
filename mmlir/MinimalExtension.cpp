@@ -9,6 +9,7 @@
 #include "MinimalCAPI.h"
 
 #include "mlir/Bindings/Python/PybindAdaptors.h"
+using namespace py::literals;
 
 using namespace mlir::python::adaptors;
 
@@ -25,5 +26,16 @@ PYBIND11_MODULE(_minimal, m) {
           mlirDialectHandleLoadDialect(handle, context);
         }
       },
-      py::arg("context") = py::none(), py::arg("load") = true);
+      "context"_a = py::none(), "load"_a = true);
+
+  mlir_type_subclass customType =
+      mlir_type_subclass(m, "CustomType", mlirTypeIsAMinimalCustomType);
+  customType.def_classmethod(
+      "get",
+      [](const py::object &cls, const std::string &value, MlirContext ctx) {
+        return cls(mlirMinimalCustomTypeGet(
+            ctx, mlirStringRefCreate(value.data(), value.size())));
+      },
+      "Get an instance of OperationType in given context.", "cls"_a, "value"_a,
+      "context"_a = py::none());
 }
