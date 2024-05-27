@@ -12,7 +12,7 @@ It is primarily meant to be used a learning aid (e.g., for understanding which p
 # Building and exercising
 
 You can either use CMake to build and run lit tests or you can `pip install` and run [test/python/smoketest.py](test/python/smoketest.py).
-Note, `pip install -r requirements.txt` is required either way (in order to get the `mlir` distribution package from https://makslevental.github.io/wheels).
+Note, `pip install -r requirements.txt` is required either way and `pip download mlir -f https://makslevental.github.io/wheels` in order to get the `mlir` distribution package.
 
 A minimal CMake might look like:
 
