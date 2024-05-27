@@ -71,4 +71,5 @@ add_mlir_python_modules(MinimalPythonModules
     MLIRPythonSources
   COMMON_CAPI_LINK_LIBS
     MinimalPythonCAPI
+    MLIRPythonCAPI
   )

@@ -108,30 +108,14 @@ jobs:
           -B build
           -S $PWD
 
-      - name: Configure CMake
-        if: contains(matrix.OS, 'windows')
-        run: >-
-          cmake -G Ninja
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_CXX_COMPILER=cl
-          -DCMAKE_C_COMPILER=cl
-          -DCMAKE_CXX_FLAGS=-MT
-          -DCMAKE_C_FLAGS=-MT
-          -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
-          -DCMAKE_PREFIX_PATH=$MLIR_DIR
-          -DLLVM_EXTERNAL_LIT="$(which lit)"
-          -DPython3_EXECUTABLE="$(which python)"
-          -B build
-          -S $PWD
-
       - name: Build and test with CMake/lit
+        if: ${{ !contains(matrix.OS, 'windows') }}
         run: |
           
           pushd build && ninja check-minimal && popd
           rm -rf build
 
       - name: Build and test using setup.py
-        if: ${{ !contains(matrix.OS, 'windows') }}
         run: |          
 
           if [ x"${{ matrix.OS }}" == x"ubuntu-22.04" ]; then
