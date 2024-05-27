@@ -61,14 +61,6 @@ class CMakeBuild(build_ext):
             "-DCMAKE_PLATFORM_NO_VERSIONED_SONAME=ON",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
         ]
-        if platform.system() == "Windows":
-            cmake_args += [
-                "-DCMAKE_C_COMPILER=cl",
-                "-DCMAKE_CXX_COMPILER=cl",
-                "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded",
-                "-DCMAKE_C_FLAGS=/MT",
-                "-DCMAKE_CXX_FLAGS=/MT",
-            ]
 
         cmake_args_dict = get_cross_cmake_args()
         cmake_args += [f"-D{k}={v}" for k, v in cmake_args_dict.items()]

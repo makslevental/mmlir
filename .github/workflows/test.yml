@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-22.04, macos-12, macos-14, windows-2019 ]
+        os: [ ubuntu-22.04, macos-12, macos-14 ]
         py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
 
         exclude:
@@ -58,19 +58,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - uses: ilammy/msvc-dev-cmd@v1.4.1
-        if: ${{ matrix.os == 'windows-2019' }}
-
-      - name: Set up Visual Studio shell
-        if: ${{ matrix.os == 'windows-2019' }}
-        uses: egor-tensin/vs-shell@v2
-        with:
-          arch: x64
-
-      - name: MS Build
-        if: ${{ matrix.os == 'windows-2019' }}
-        uses: microsoft/setup-msbuild@v1.1
 
       - name: Install Ninja
         uses: llvm/actions/install-ninja@6a57890d0e3f9f35dfc72e7e48bc5e1e527cdd6c # Jan 17
@@ -98,7 +85,6 @@ jobs:
           echo "MLIR_DIR=$PWD/mlir" >> $GITHUB_ENV
 
       - name: Configure CMake
-        if: ${{ !contains(matrix.OS, 'windows') }}
         run: >-
           cmake -G Ninja
           -DCMAKE_BUILD_TYPE=Release
@@ -109,7 +95,6 @@ jobs:
           -S $PWD
 
       - name: Build and test with CMake/lit
-        if: ${{ !contains(matrix.OS, 'windows') }}
         run: |
           
           pushd build && ninja check-minimal && popd
@@ -124,8 +109,6 @@ jobs:
             CIBW_ARCHS=x86_64
           elif [ x"${{ matrix.OS }}" == x"macos-14" ]; then
             CIBW_ARCHS=arm64
-          elif [ x"${{ matrix.OS }}" == x"windows-2019" ]; then
-            CIBW_ARCHS=AMD64
           fi
           export CIBW_ARCHS
           
@@ -138,12 +121,11 @@ jobs:
 
   test-aarch64:
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-22.04 ]
         py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
 
     steps:
