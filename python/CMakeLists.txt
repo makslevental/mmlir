@@ -11,7 +11,7 @@ declare_mlir_python_sources(MinimalPythonSources)
 
 # this is so tablegen emits stuff into this dir
 set(SAVED_CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dialects)
+set(CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/mmlir/dialects)
 set(LLVM_TARGET_DEFINITIONS Minimal.td)
 mlir_tablegen(_minimal_ops_gen.py
   -gen-python-op-bindings -bind-dialect=minimal
@@ -21,7 +21,7 @@ set(CMAKE_CURRENT_BINARY_DIR ${SAVED_CMAKE_CURRENT_BINARY_DIR})
 
 declare_mlir_python_sources(MinimalPythonSources.minimal
   ADD_TO_PARENT MinimalPythonSources
-  ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dialects"
+  ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/mmlir/dialects"
   SOURCES
     minimal.py
 )

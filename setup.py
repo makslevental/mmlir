@@ -117,4 +117,5 @@ setup(
     zip_safe=False,
     python_requires=">=3.8",
     packages=["mmlir.dialects"],
+    package_dir={"mmlir.dialects": str(Path("python") / "mmlir" / "dialects")},
 )
