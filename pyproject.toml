@@ -1,0 +1,47 @@
+[build-system]
+requires = [
+    "cmake>=3.28",
+    "setuptools>=42",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel]
+build-verbosity = 3
+before-all = [
+    "rm -rf {project}/build",
+    "rm -rf *egg*",
+]
+manylinux-aarch64-image = "manylinux_2_28"
+manylinux-x86_64-image = "manylinux_2_28"
+
+[tool.cibuildwheel.linux]
+build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
+skip = ["*-manylinux_i686", "*-musllinux*"]
+environment-pass = [
+    "CIBW_ARCHS",
+    "PIP_NO_BUILD_ISOLATION",
+]
+before-all = [
+    "yum install -y epel-release && yum install -y ninja-build cmake gcc"
+]
+before-build = [
+    "pip install -r requirements.txt",
+    "pip install cmake>=3.28 setuptools>=42 wheel"
+]
+
+[tool.cibuildwheel.macos]
+build = "cp310-* cp311-* cp312-*"
+before-build = [
+    "pip install -r requirements.txt",
+    "pip install cmake>=3.28 setuptools>=42 wheel"
+]
+repair-wheel-command = []
+
+[tool.cibuildwheel.windows]
+build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
+skip = ["*-win32"]
+before-build = [
+    "pip install -r requirements.txt",
+    "pip install cmake>=3.28 setuptools>=42 wheel"
+]

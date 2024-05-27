@@ -1,0 +1,194 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    branches:
+      - main
+  schedule:
+    # At minute 0 past hour 6. (see https://crontab.guru)
+    - cron: '00 06 * * *'
+
+concurrency:
+  # A PR number if a pull request and otherwise the commit hash. This cancels
+  # queued and in-progress runs for the same PR (presubmit) or commit
+  # (postsubmit).
+  group: ci-build-test-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
+
+env:
+  # this actually turns build isolation on!
+  # pip flags -> env variables conversion is weird...
+  PIP_NO_BUILD_ISOLATION: false
+
+jobs:
+
+  test:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-22.04, macos-12, macos-14 ]
+        py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
+
+        exclude:
+          - os: macos-12
+            py_version: "3.8"
+
+          - os: macos-12
+            py_version: "3.9"
+
+          - os: macos-14
+            py_version: "3.8"
+
+          - os: macos-14
+            py_version: "3.9"
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Ninja
+        uses: llvm/actions/install-ninja@6a57890d0e3f9f35dfc72e7e48bc5e1e527cdd6c # Jan 17
+
+      - name: set ENV macos
+        if: contains(matrix.OS, 'macos')
+        shell: bash
+        run: |
+          # error: 'value' is unavailable: introduced in macOS 10.13
+          echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" | tee -a $GITHUB_ENV
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "${{ matrix.py_version }}"
+          allow-prereleases: true
+
+      - name: install prereqs
+        run: |
+          
+          pip install -r requirements.txt
+          pip install cmake>=3.28 setuptools>=42 wheel
+          pip download mlir -f https://makslevental.github.io/wheels
+          unzip mlir-*.whl
+          echo "MLIR_DIR=$PWD/mlir" >> $GITHUB_ENV
+
+      - name: Configure CMake
+        run: >-
+          cmake -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH=$MLIR_DIR
+          -DLLVM_EXTERNAL_LIT=$(which lit)
+          -DPython3_EXECUTABLE=$(which python)
+          -B build
+          -S $PWD
+
+      - name: Build and test with CMake/lit
+        run: |
+          
+          pushd build && ninja check-minimal && popd
+          rm -rf build
+
+      - name: Build and test using setup.py
+        run: |          
+
+          if [ x"${{ matrix.OS }}" == x"ubuntu-22.04" ]; then
+            CIBW_ARCHS=x86_64
+          elif [ x"${{ matrix.OS }}" == x"macos-12" ]; then
+            CIBW_ARCHS=x86_64
+          elif [ x"${{ matrix.OS }}" == x"macos-14" ]; then
+            CIBW_ARCHS=arm64
+          fi
+          export CIBW_ARCHS
+          
+          pip install cibuildwheel
+          CIBW_BUILD=${{ matrix.PY_VERSION }}
+          export CIBW_BUILD="cp${CIBW_BUILD//./}-*"
+          cibuildwheel --output-dir wheelhouse
+          pip install mmlir -f wheelhouse
+          pushd test/python && python smoketest.py && popd
+
+  test-aarch64:
+
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Test CMake
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: aarch64
+          distro: ubuntu22.04
+          dockerRunArgs: --volume "${{ github.workspace }}:/workspace"
+          install: |
+            
+            apt-get update -q -y
+            apt-get install -y wget build-essential python3 \
+              python-is-python3 python3-pip cmake ninja-build unzip
+        
+          run: |
+            
+            cd /workspace
+            pip install -r requirements.txt
+            pip download mlir -f https://makslevental.github.io/wheels
+            unzip mlir-*.whl
+            
+            cmake -G Ninja \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_PREFIX_PATH=$PWD/mlir \
+              -DLLVM_EXTERNAL_LIT=$(which lit) \
+              -DPython3_EXECUTABLE=$(which python) \
+              -B build \
+              -S $PWD
+            
+            pushd build && ninja check-minimal && popd
+            rm -rf build
+
+      - name: Test cibuildwheel
+        uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: aarch64
+          distro: ubuntu22.04
+          dockerRunArgs: --volume "${{ github.workspace }}:/workspace"
+          install: |
+            
+            apt-get update -q -y
+            apt-get install -y wget build-essential cmake ninja-build
+
+            mkdir -p ~/miniconda3
+            wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh -O miniconda.sh
+            bash miniconda.sh -b -u -p /root/miniconda3
+            eval "$(/root/miniconda3/bin/conda shell.bash hook)"
+            conda init
+
+          run: |
+            
+            eval "$(/root/miniconda3/bin/conda shell.bash hook)"
+            conda create -n env -q -y -c conda-forge/label/python_rc python=${{ matrix.py_version }} 
+            conda activate env
+            
+            cd /workspace
+            
+            export CIBW_ARCHS=aarch64
+            pip install -r requirements.txt
+            pip wheel . -v -w wheelhouse --no-build-isolation
+            pip install mmlir -f wheelhouse
+            pushd test/python && python smoketest.py && popd
