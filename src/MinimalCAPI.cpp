@@ -14,3 +14,15 @@
 
 MLIR_DEFINE_CAPI_DIALECT_REGISTRATION(Minimal, minimal,
                                       mlir::minimal::MinimalDialect)
+
+//===---------------------------------------------------------------------===//
+// CustomType
+//===---------------------------------------------------------------------===//
+
+bool mlirTypeIsAMinimalCustomType(MlirType type) {
+  return llvm::isa<mlir::minimal::CustomType>(unwrap(type));
+}
+
+MlirType mlirMinimalCustomTypeGet(MlirContext ctx, MlirStringRef value) {
+  return wrap(mlir::minimal::CustomType::get(unwrap(ctx), unwrap(value)));
+}

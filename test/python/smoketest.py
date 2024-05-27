@@ -14,3 +14,8 @@ with Context():
     # CHECK: %[[C:.*]] = arith.constant 2 : i32
     # CHECK: minimal.foo %[[C]] : i32
     print(str(module))
+
+    t = minimal_d.CustomType.get("hello")
+    # CHECK: !minimal.custom<"hello">
+    print(t)
+
