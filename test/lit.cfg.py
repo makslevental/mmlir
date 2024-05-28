@@ -59,8 +59,8 @@ llvm_config.add_tool_substitutions(tools, tool_dirs)
 llvm_config.with_environment(
     "PYTHONPATH",
     [
-        os.path.join(config.minimal_obj_root, "mmlir"),
-        os.path.join(config.minimal_src_root),
+        os.path.join(config.minimal_obj_root, "python"),
+        os.path.join(config.minimal_src_root, "python"),
     ],
     append_path=True,
 )
