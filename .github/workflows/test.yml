@@ -82,6 +82,7 @@ jobs:
           pip install cmake>=3.28 setuptools>=42 wheel
           pip download mlir -f https://makslevental.github.io/wheels
           unzip mlir-*.whl
+          rm -rf mlir-*.whl
           echo "MLIR_DIR=$PWD/mlir" >> $GITHUB_ENV
 
       - name: Configure CMake
@@ -150,6 +151,7 @@ jobs:
             pip install -r requirements.txt
             pip download mlir -f https://makslevental.github.io/wheels
             unzip mlir-*.whl
+            rm -rf mlir-*.whl
             
             cmake -G Ninja \
               -DCMAKE_BUILD_TYPE=Release \
