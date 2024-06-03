@@ -69,6 +69,16 @@ class CMakeBuild(build_ext):
             cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
 
         build_args = []
+        if platform.system() == "Windows":
+            cmake_args += [
+                "-DCMAKE_C_COMPILER=cl",
+                "-DCMAKE_CXX_COMPILER=cl",
+                "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded",
+                "-DCMAKE_C_FLAGS=/MT",
+                "-DCMAKE_CXX_FLAGS=/MT",
+                "-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON",
+                "-DCMAKE_SUPPORT_WINDOWS_EXPORT_ALL_SYMBOLS=ON",
+            ]
         if sys.platform.startswith("darwin"):
             macosx_deployment_target = os.getenv("MACOSX_DEPLOYMENT_TARGET", "11.6")
             cmake_args += [f"-DCMAKE_OSX_DEPLOYMENT_TARGET={macosx_deployment_target}"]
