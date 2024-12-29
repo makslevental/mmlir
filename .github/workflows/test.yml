@@ -35,7 +35,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-22.04, macos-13, macos-14, macos-15 ]
+
+        os: [ ubuntu-22.04, macos-13, macos-14, macos-15, windows-2019 ]
         py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
 
         exclude:
@@ -65,6 +66,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - uses: ilammy/msvc-dev-cmd@v1.4.1
+        if: ${{ matrix.os == 'windows-2019' }}
+
+      - name: Set up Visual Studio shell
+        if: ${{ matrix.os == 'windows-2019' }}
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
+
+      - name: MS Build
+        if: ${{ matrix.os == 'windows-2019' }}
+        uses: microsoft/setup-msbuild@v1.1
+
       - name: Install Ninja
         uses: llvm/actions/install-ninja@6a57890d0e3f9f35dfc72e7e48bc5e1e527cdd6c # Jan 17
 
@@ -92,12 +106,31 @@ jobs:
           echo "MLIR_DIR=$PWD/mlir" >> $GITHUB_ENV
 
       - name: Configure CMake
+        if: ${{ !contains(matrix.OS, 'windows') }}
         run: >-
           cmake -G Ninja
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_PREFIX_PATH=$MLIR_DIR
           -DLLVM_EXTERNAL_LIT=$(which lit)
           -DPython3_EXECUTABLE=$(which python)
+          -B build
+          -S $PWD
+
+      - name: Configure CMake
+        if: contains(matrix.OS, 'windows')
+        run: >-
+          cmake -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_CXX_COMPILER=cl
+          -DCMAKE_C_COMPILER=cl
+          -DCMAKE_CXX_FLAGS=-MT
+          -DCMAKE_C_FLAGS=-MT
+          -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+          -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
+          -DCMAKE_SUPPORT_WINDOWS_EXPORT_ALL_SYMBOLS=ON
+          -DCMAKE_PREFIX_PATH=$MLIR_DIR
+          -DLLVM_EXTERNAL_LIT="$(which lit)"
+          -DPython3_EXECUTABLE="$(which python)"
           -B build
           -S $PWD
 
@@ -116,6 +149,9 @@ jobs:
             CIBW_ARCHS=x86_64
           elif [ x"${{ matrix.OS }}" == x"macos-14" ]; then
             CIBW_ARCHS=arm64
+
+          elif [ x"${{ matrix.OS }}" == x"windows-2019" ]; then
+            CIBW_ARCHS=AMD64
           elif [ x"${{ matrix.OS }}" == x"macos-15" ]; then
             CIBW_ARCHS=arm64
           fi
