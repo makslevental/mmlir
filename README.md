@@ -8,7 +8,7 @@ This repo demos a slightly unconventional way to bootstrap an MLIR project:
 3. It smashes all the implementation into a single [src/MinimalDialect.cpp](src/MinimalDialect.cpp)
 4. Python bindings @ [python/mmlir/dialects](python/mmlir/dialects) are arranged to have generated artifacts to be dumped in place.
 
-It is primarily meant to be used a learning aid (e.g., for understanding which parts of the upstream CMake are essential and which aren't) and not as a germ/seed/cookiecutter for a production quality project.
+It is primarily meant to be used as a learning aid (e.g., for understanding which parts of the upstream CMake are essential and which aren't) and not as a germ/seed/cookiecutter for a production quality project.
 
 # Building and exercising
 
