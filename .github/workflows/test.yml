@@ -51,6 +51,12 @@ jobs:
           - os: macos-14
             py_version: "3.9"
 
+          - os: macos-15
+            py_version: "3.8"
+
+          - os: macos-15
+            py_version: "3.9"
+
     defaults:
       run:
         shell: bash
