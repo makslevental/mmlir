@@ -33,7 +33,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ ubuntu-22.04, macos-13, macos-14, macos-15 ]
         py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
@@ -106,9 +106,11 @@ jobs:
 
           if [ x"${{ matrix.OS }}" == x"ubuntu-22.04" ]; then
             CIBW_ARCHS=x86_64
-          elif [ x"${{ matrix.OS }}" == x"macos-12" ]; then
+          elif [ x"${{ matrix.OS }}" == x"macos-13" ]; then
             CIBW_ARCHS=x86_64
           elif [ x"${{ matrix.OS }}" == x"macos-14" ]; then
+            CIBW_ARCHS=arm64
+          elif [ x"${{ matrix.OS }}" == x"macos-15" ]; then
             CIBW_ARCHS=arm64
           fi
           export CIBW_ARCHS
