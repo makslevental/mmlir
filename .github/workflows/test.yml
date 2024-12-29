@@ -79,6 +79,7 @@ jobs:
         run: |
           
           pip install -r requirements.txt
+          pip install -r https://raw.githubusercontent.com/llvm/llvm-project/refs/heads/main/mlir/python/requirements.txt
           pip install cmake>=3.28 setuptools>=42 wheel
           pip download mlir -f https://makslevental.github.io/wheels
           unzip mlir-*.whl
