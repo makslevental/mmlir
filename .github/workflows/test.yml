@@ -112,6 +112,8 @@ jobs:
 
           if [ x"${{ matrix.OS }}" == x"ubuntu-22.04" ]; then
             CIBW_ARCHS=x86_64
+          elif [ x"${{ matrix.OS }}" == x"ubuntu-22.04-arm" ]; then
+            CIBW_ARCHS=aarch64
           elif [ x"${{ matrix.OS }}" == x"macos-13" ]; then
             CIBW_ARCHS=x86_64
           elif [ x"${{ matrix.OS }}" == x"macos-14" ]; then
