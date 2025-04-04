@@ -1,5 +1,7 @@
 # Minimal MLIR
 
+[![Nightly Test](https://github.com/makslevental/mmlir/actions/workflows/test.yml/badge.svg)](https://github.com/makslevental/mmlir/actions/workflows/test.yml)
+
 This repo demos a slightly unconventional way to bootstrap an MLIR project:
 
 1. It relies on https://makslevental.github.io/wheels for the upstream distribution of MLIR
