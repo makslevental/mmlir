@@ -12,7 +12,7 @@ before-all = [
     "rm -rf {project}/build",
     "rm -rf *egg*",
 ]
-manylinux-aarch64-image = "manylinux_2_28"
+manylinux-aarch64-image = "quay.io/pypa/manylinux_2_34_aarch64"
 manylinux-x86_64-image = "manylinux_2_28"
 
 [tool.cibuildwheel.linux]
