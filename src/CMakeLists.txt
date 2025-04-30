@@ -10,6 +10,7 @@ add_mlir_dialect_library(
 
   DEPENDS
   MLIRMinimalIncGen
+  copy_generated_td_to_src_include
 
   LINK_LIBS PUBLIC
   MLIRIR
