@@ -9,15 +9,25 @@ add_compile_definitions("MLIR_PYTHON_PACKAGE_PREFIX=mmlir.")
 
 declare_mlir_python_sources(MinimalPythonSources)
 
-# this is so tablegen emits stuff into this dir
-set(SAVED_CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_CURRENT_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/mmlir/dialects)
 set(LLVM_TARGET_DEFINITIONS Minimal.td)
 mlir_tablegen(_minimal_ops_gen.py
   -gen-python-op-bindings -bind-dialect=minimal
 )
+set(MINIMAL_OPS_GEN_TABLEGEN_OUTPUT ${TABLEGEN_OUTPUT})
 add_public_tablegen_target(MinimalPythonSources.minimal.tablegen)
-set(CMAKE_CURRENT_BINARY_DIR ${SAVED_CMAKE_CURRENT_BINARY_DIR})
+# copy generated files from build dir to here
+add_custom_command(
+  OUTPUT
+    ${CMAKE_CURRENT_SOURCE_DIR}/mmlir/dialects/_minimal_ops_gen.py
+  DEPENDS
+    MinimalPythonSources.minimal.tablegen
+  COMMENT
+    "copying generated py files from build to src include dir"
+  COMMAND
+    ${CMAKE_COMMAND} -E copy ${MINIMAL_OPS_GEN_TABLEGEN_OUTPUT} ${CMAKE_CURRENT_SOURCE_DIR}/mmlir/dialects
+)
+
+add_custom_target(copy_generated_py_to_src_include DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/mmlir/dialects/_minimal_ops_gen.py)
 
 declare_mlir_python_sources(MinimalPythonSources.minimal
   ADD_TO_PARENT MinimalPythonSources
@@ -72,3 +82,4 @@ add_mlir_python_modules(MinimalPythonModules
   COMMON_CAPI_LINK_LIBS
     MinimalPythonCAPI
 )
+add_dependencies(MinimalPythonModules copy_generated_py_to_src_include)

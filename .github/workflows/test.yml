@@ -66,7 +66,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Ninja
-        uses: llvm/actions/install-ninja@6a57890d0e3f9f35dfc72e7e48bc5e1e527cdd6c # Jan 17
+        uses: seanmiddleditch/gha-setup-ninja@v6
+        with:
+          version: '1.12.1'
 
       - name: set ENV macos
         if: contains(matrix.OS, 'macos')
@@ -87,7 +89,7 @@ jobs:
           pip install -r requirements.txt
           pip install cmake>=3.28 setuptools>=42 wheel
           pip download mlir -f https://makslevental.github.io/wheels
-          unzip mlir-*.whl
+          unzip -q mlir-*.whl
           rm -rf mlir-*.whl
           echo "MLIR_DIR=$PWD/mlir" >> $GITHUB_ENV
 

@@ -3,6 +3,7 @@ requires = [
     "cmake>=3.28",
     "setuptools>=42",
     "wheel",
+    "ninja>=1.12.1"
 ]
 build-backend = "setuptools.build_meta"
 
@@ -23,18 +24,18 @@ environment-pass = [
     "PIP_NO_BUILD_ISOLATION",
 ]
 before-all = [
-    "yum install -y epel-release && yum install -y ninja-build cmake gcc"
+    "yum install -y epel-release && yum install -y cmake gcc"
 ]
 before-build = [
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=42 wheel"
+    "pip install cmake>=3.28 setuptools>=42 wheel ninja>=1.12.1"
 ]
 
 [tool.cibuildwheel.macos]
 build = "cp310-* cp311-* cp312-*"
 before-build = [
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=42 wheel"
+    "pip install cmake>=3.28 setuptools>=42 wheel ninja>=1.12.1"
 ]
 repair-wheel-command = []
 
@@ -43,5 +44,5 @@ build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
 skip = ["*-win32"]
 before-build = [
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=42 wheel"
+    "pip install cmake>=3.28 setuptools>=42 wheel ninja>=1.12.1"
 ]
