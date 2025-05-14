@@ -1,7 +1,7 @@
 [build-system]
 requires = [
     "cmake>=3.28",
-    "setuptools>=42",
+    "setuptools>=64",
     "wheel",
     "ninja>=1.12.1"
 ]
@@ -28,14 +28,14 @@ before-all = [
 ]
 before-build = [
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=42 wheel ninja>=1.12.1"
+    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1"
 ]
 
 [tool.cibuildwheel.macos]
 build = "cp310-* cp311-* cp312-*"
 before-build = [
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=42 wheel ninja>=1.12.1"
+    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1"
 ]
 repair-wheel-command = []
 
@@ -44,5 +44,5 @@ build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
 skip = ["*-win32"]
 before-build = [
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=42 wheel ninja>=1.12.1"
+    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1"
 ]
