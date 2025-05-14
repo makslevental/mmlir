@@ -86,8 +86,9 @@ jobs:
       - name: install prereqs
         run: |
           
+          pip install --upgrade pip
           pip install -r requirements.txt
-          pip install cmake>=3.28 setuptools>=42 wheel
+          pip install cmake>=3.28 setuptools>=64 wheel
           pip download mlir -f https://makslevental.github.io/wheels
           unzip -q mlir-*.whl
           rm -rf mlir-*.whl
