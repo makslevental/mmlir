@@ -126,7 +126,7 @@ jobs:
           fi
           export CIBW_ARCHS
           
-          pip install cibuildwheel
+          pip install cibuildwheel==2.23.3
           CIBW_BUILD=${{ matrix.PY_VERSION }}
           export CIBW_BUILD="cp${CIBW_BUILD//./}-*"
           cibuildwheel --output-dir wheelhouse
