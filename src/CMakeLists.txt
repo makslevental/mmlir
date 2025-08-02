@@ -16,6 +16,8 @@ add_mlir_dialect_library(
   MLIRIR
   MLIRInferTypeOpInterface
   MLIRFuncDialect
+  MLIRRegisterAllDialects
+  MLIRRegisterAllPasses
 )
 
 add_mlir_public_c_api_library(MinimalCAPI

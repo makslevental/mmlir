@@ -12,12 +12,11 @@
 #include "mlir/IR/Builders.h"
 #include "mlir/IR/DialectImplementation.h"
 #include "mlir/IR/PatternMatch.h"
-#include "mlir/InitAllDialects.h"
-#include "mlir/InitAllPasses.h"
 #include "mlir/Rewrite/FrozenRewritePatternSet.h"
 #include "mlir/Support/LogicalResult.h"
 #include "mlir/Tools/mlir-opt/MlirOptMain.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
+#include "llvm/ADT/TypeSwitch.h"
 
 using namespace mlir;
 using namespace mlir::minimal;
@@ -32,6 +31,7 @@ void MinimalDialect::initialize() {
   addOperations<
 #define GET_OP_LIST
 #include "MinimalOps.cpp.inc"
+
       >();
   registerTypes();
 }
@@ -92,5 +92,6 @@ void MinimalDialect::registerTypes() {
   addTypes<
 #define GET_TYPEDEF_LIST
 #include "MinimalTypes.cpp.inc"
+
       >();
 }

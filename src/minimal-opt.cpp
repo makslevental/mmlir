@@ -8,6 +8,7 @@
 
 #include "MinimalDialect.h"
 
+#include "mlir/Dialect/Arith/IR/Arith.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/InitAllDialects.h"
 #include "mlir/InitAllPasses.h"
