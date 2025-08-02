@@ -3,7 +3,7 @@ requires = [
     "cmake>=3.28",
     "setuptools>=64",
     "wheel",
-    "ninja>=1.12.1"
+    "ninja"
 ]
 build-backend = "setuptools.build_meta"
 
@@ -17,7 +17,7 @@ manylinux-aarch64-image = "quay.io/pypa/manylinux_2_34_aarch64"
 manylinux-x86_64-image = "manylinux_2_28"
 
 [tool.cibuildwheel.linux]
-build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
+build = "cp38-* cp39-* cp310-* cp311-* cp312-* cp313-* cp314-* cp314t-*"
 skip = ["*-manylinux_i686", "*-musllinux*"]
 environment-pass = [
     "CIBW_ARCHS",
@@ -27,22 +27,22 @@ before-all = [
     "yum install -y epel-release && yum install -y cmake gcc"
 ]
 before-build = [
+    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1",
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1"
 ]
 
 [tool.cibuildwheel.macos]
-build = "cp310-* cp311-* cp312-*"
+build = "cp310-* cp311-* cp312-* cp313-* cp314-* cp314t-*"
 before-build = [
+    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1",
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1"
 ]
 repair-wheel-command = []
 
 [tool.cibuildwheel.windows]
-build = "cp38-* cp39-* cp310-* cp311-* cp312-*"
+build = "cp38-* cp39-* cp310-* cp311-* cp312-* cp313-* cp314-* cp314t-*"
 skip = ["*-win32"]
 before-build = [
+    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1",
     "pip install -r requirements.txt",
-    "pip install cmake>=3.28 setuptools>=64 wheel ninja>=1.12.1"
 ]

@@ -36,7 +36,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-22.04, ubuntu-22.04-arm, macos-13, macos-14, macos-15 ]
-        py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
+        py_version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.14t" ]
 
         exclude:
           - os: macos-13
@@ -71,14 +71,14 @@ jobs:
           version: '1.12.1'
 
       - name: set ENV macos
-        if: contains(matrix.OS, 'macos')
+        if: contains(matrix.os, 'macos')
         shell: bash
         run: |
           # error: 'value' is unavailable: introduced in macOS 10.13
           echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" | tee -a $GITHUB_ENV
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5.6
         with:
           python-version: "${{ matrix.py_version }}"
           allow-prereleases: true
@@ -87,8 +87,8 @@ jobs:
         run: |
           
           pip install --upgrade pip
-          pip install -r requirements.txt
           pip install cmake>=3.28 setuptools>=64 wheel
+          pip install -r requirements.txt
           pip download mlir -f https://makslevental.github.io/wheels
           unzip -q mlir-*.whl
           rm -rf mlir-*.whl
@@ -126,9 +126,6 @@ jobs:
           fi
           export CIBW_ARCHS
           
-          pip install cibuildwheel==2.23.3
-          CIBW_BUILD=${{ matrix.PY_VERSION }}
-          export CIBW_BUILD="cp${CIBW_BUILD//./}-*"
-          cibuildwheel --output-dir wheelhouse
+          pip wheel . -w wheelhouse -v
           pip install mmlir -f wheelhouse
           pushd test/python && python smoketest.py && popd
