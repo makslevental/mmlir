@@ -78,7 +78,7 @@ jobs:
           echo "MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)" | tee -a $GITHUB_ENV
 
       - name: Setup Python
-        uses: actions/setup-python@v5.6
+        uses: actions/setup-python@v5.6.0
         with:
           python-version: "${{ matrix.py_version }}"
           allow-prereleases: true
